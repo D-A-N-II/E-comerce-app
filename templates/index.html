@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuyPest - Online Pesticide Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .top-bar {
+            background-color: #f7f7f7;
+            padding: 8px 0;
+            font-size: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .top-bar-content {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .top-bar-left {
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-bar-right {
+            display: flex;
+            gap: 20px;
+        }
+
+        .header {
+            background-color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .cart-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .categories {
+            background-color: white;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .categories-content {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category-btn {
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .category-btn.active {
+            background-color: #ffd84d;
+            color: #333;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .product-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background-color: #42a2a2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background-color: #357878;
+        }
+
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .cart-content {
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-items-container {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .cart-actions {
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .buy-now-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #42a2a2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .buy-now-btn:hover {
+            background-color: #357878;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            margin-right: 15px;
+            border-radius: 4px;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #42a2a2;
+            font-weight: 600;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .cart-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            text-align: right;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .promo-banner {
+            background-color: #ffd84d;
+            padding: 10px;
+            text-align: center;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <span>Offers</span>
+                <span>Download App</span>
+                <span>Find a store</span>
+            </div>
+            <div class="top-bar-right">
+                <span>Contact Us</span>
+                <span>Track Order</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="header-content">
+            <a href="/" class="logo">BUYPEST</a>
+            <nav class="nav-menu">
+                <a href="#" class="nav-link">INSECTICIDES</a>
+                <a href="#" class="nav-link">HERBICIDES</a>
+                <a href="#" class="nav-link">FUNGICIDES</a>
+            </nav>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search by products">
+            </div>
+            <div class="user-actions">
+                <button class="cart-btn" onclick="toggleCart()">
+                    Cart (<span id="cart-count">0</span>)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="promo-banner">
+        Get 10% OFF on your first order! Use code: FIRST10
+    </div>
+
+    <div class="categories">
+        <div class="categories-content">
+            <button class="category-btn active" data-category="all">All Products</button>
+            <button class="category-btn" data-category="Insecticide">Insecticides</button>
+            <button class="category-btn" data-category="Herbicide">Herbicides</button>
+            <button class="category-btn" data-category="Fungicide">Fungicides</button>
+            <button class="category-btn" data-category="Multi-purpose">Multi-purpose</button>
+        </div>
+    </div>
+
+    <div class="products-grid" id="products-container">
+        <!-- Products will be loaded here -->
+    </div>
+
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Shopping Cart</h2>
+                <button class="close" onclick="toggleCart()">&times;</button>
+            </div>
+            <div class="cart-items-container">
+                <div id="cart-items">
+                    <!-- Cart items will be loaded here -->
+                </div>
+            </div>
+            <div class="cart-actions">
+                <div id="cart-total"></div>
+                <button class="buy-now-btn" onclick="proceedToCheckout()">Buy Now</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let products = [];
+
+        // Load products
+        async function loadProducts(category = 'all') {
+            const response = await fetch(`/api/products?category=${category}`);
+            products = await response.json();
+            displayProducts();
+        }
+
+        // Display products
+        function displayProducts() {
+            const container = document.getElementById('products-container');
+            container.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <img src="${product.image_url}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-price">${product.price}</div>
+                        <button class="add-to-cart" onclick="addToCart(${product.id})">ADD TO CART</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Parse price string to number
+        function parsePriceToNumber(priceStr) {
+            return parseFloat(priceStr.replace('₹', '').replace(/,/g, ''));
+        }
+
+        // Format number to price string
+        function formatPrice(number) {
+            return '₹' + number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        // Filter products
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                loadProducts(e.target.dataset.category);
+            });
+        });
+
+        // Cart functions
+        async function addToCart(productId) {
+            try {
+                const response = await fetch('/api/cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        action: 'add'
+                    })
+                });
+                
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to add to cart');
+                }
+                
+                await loadCart();
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+                alert(error.message || 'Failed to add item to cart. Please try again.');
+            }
+        }
+
+        async function removeFromCart(productId) {
+            try {
+                const response = await fetch('/api/cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        action: 'remove'
+                    })
+                });
+                
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to remove from cart');
+                }
+                
+                await loadCart();
+            } catch (error) {
+                console.error('Error removing from cart:', error);
+                alert(error.message || 'Failed to remove item from cart. Please try again.');
+            }
+        }
+
+        async function loadCart() {
+            try {
+                const response = await fetch('/api/cart');
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to load cart');
+                }
+                
+                cart = data;
+                document.getElementById('cart-count').textContent = cart.length;
+                displayCart();
+            } catch (error) {
+                console.error('Error loading cart:', error);
+                cart = [];
+                document.getElementById('cart-count').textContent = '0';
+                displayCart();
+                alert(error.message || 'Failed to load cart. Please refresh the page.');
+            }
+        }
+
+        function displayCart() {
+            const cartItems = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+                document.getElementById('cart-total').innerHTML = '';
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => {
+                return sum + parsePriceToNumber(item.price);
+            }, 0);
+            
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <img src="${item.image_url}" alt="${item.name}">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">${item.price}</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+                </div>
+            `).join('');
+
+            document.getElementById('cart-total').innerHTML = `
+                <div class="cart-total">Total: ${formatPrice(total)}</div>
+            `;
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty. Add some items before checking out.');
+                return;
+            }
+            alert('Proceeding to checkout... This feature will be implemented soon!');
+            // You can implement the checkout logic here
+        }
+
+        // Initial load
+        loadProducts();
+        loadCart();
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('cart-modal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html> 
